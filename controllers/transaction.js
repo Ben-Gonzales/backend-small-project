@@ -1,4 +1,6 @@
-const transactionModel = require('../models/Transaction');s
+const transactionModel = require('../models/Transaction');
+const clientModel = require('../models/Client');
+const productModel = require('../models/Product');
 
 const getTransactions = (req, res) => {
     transactionModel.find()
@@ -15,12 +17,21 @@ const getTransaction = (req, res) => {
 
 const createTransaction = (req, res) => {
         const newTransaction = new transactionModel({
-                customer: req.body.customer,
-                item: req.body.itemType,
-                quantity: req.body.quantity,
-                price: req.body.price,
+                customerId: clientModel._id,
+                firstName: clientModel.firstName,
+                lastName: clientModel.lastName,
+                itemId: productModel._id,
+                itemType: productModel.itemType,
+                quantity: productModel.quantity,
+                price: productModel.price,
+                total: req.body.total,
             });
-            newTransaction.save().then(() => {
+            newTransaction.save((err, savedTransaction) => {
+                if (err) {
+                  console.error('Error creating transaction:', err);
+                } else {
+                  console.log('Transaction saved:', savedTransaction);
+                }}).then(() => {
                 transactionModel.find().then(data => res.send(data))
             })
         }
