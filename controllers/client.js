@@ -1,26 +1,26 @@
-const clientModel = require('../models/Client');
+const ClientModel = require('../models/Client');
 const bcrypt = require('bcrypt');
 
 const getClients = (req, res) => {
-    clientModel.find()
+    ClientModel.find()
     .then(data => {
         res.send(data);
     })
 }
 
 const getClient = (req, res) => {
-    clientModel.findOne()({_id: req.params.id}
+    ClientModel.findOne()({_id: req.params.id}
         .then(data => { res.send(data);
         }))
 }
 
 const createClient = (req, res) => {
-    clientModel.find({ userName: req.body.userName}).then(existingUser => {
+    ClientModel.find({ userName: req.body.userName}).then(existingUser => {
         if (existingUser.length > 0) {
             res.status(409).send({ error: true, message: 'Username already used'})
         } else {
             const hash = bcrypt.hashSync(req.body.passWord, 10);
-            const newClient = new clientModel({
+            const newClient = new ClientModel({
                 firstName: req.body.firstName,
                 lastName: req.body.lastName,
                 birthDate: req.body.birthDate,
@@ -29,7 +29,7 @@ const createClient = (req, res) => {
                 passWord: hash,
             });
             newClient.save().then(() => {
-                clientModel.find().then(data => res.send(data))
+                ClientModel.find().then(data => res.send(data))
             })
         }
     })
@@ -45,13 +45,13 @@ const updateClient = (req, res) => {
         userName: req.body.userName,
         passWord: req.body.passWord,
     }
-    clientModel.findOneAndUpdate(filter, updateClientValues)
+    ClientModel.findOneAndUpdate(filter, updateClientValues)
     .then(() =>  res.sendStatus(201))
 }
 
 const deleteClient = (req, res) => {
-    clientModel.findByIdAndDelete(req.body.id).then(() => {
-        clientModel.find().then(data => res.send(data))
+    ClientModel.findByIdAndDelete(req.body.id).then(() => {
+        ClientModel.find().then(data => res.send(data))
     })
 }
 

@@ -1,44 +1,40 @@
-const transactionModel = require('../models/Transaction');
-const clientModel = require('../models/Client');
-const productModel = require('../models/Product');
+const TransactionModel = require('../models/Transaction');
+const ClientModel = require('../models/Client');
+const ProductModel = require('../models/Product');
 
 const getTransactions = (req, res) => {
-    transactionModel.find()
+    TransactionModel.find()
     .then(data => {
         res.send(data);
     })
 }
 
 const getTransaction = (req, res) => {
-    transactionModel.findOne()({_id: req.params.id}
+    TransactionModel.findOne()({_id: req.params.id}
         .then(data => { res.send(data);
         }))
 }
 
 const createTransaction = (req, res) => {
-        const newTransaction = new transactionModel({
-                customerId: clientModel._id,
-                firstName: clientModel.firstName,
-                lastName: clientModel.lastName,
-                itemId: productModel._id,
-                itemType: productModel.itemType,
-                quantity: productModel.quantity,
-                price: productModel.price,
+        const newTransaction = new TransactionModel({
+                customerId: ClientModel._id,
+                firstName: ClientModel.firstName,
+                lastName: ClientModel.lastName,
+                itemId: ProductModel._id,
+                itemType: ProductModel.itemType,
+                quantity: ProductModel.quantity,
+                price: ProductModel.price,
                 total: req.body.total,
             });
             newTransaction.save((err, savedTransaction) => {
-                if (err) {
-                  console.error('Error creating transaction:', err);
-                } else {
-                  console.log('Transaction saved:', savedTransaction);
-                }}).then(() => {
-                transactionModel.find().then(data => res.send(data))
-            })
+                if (err) console.error('Error creating transaction:', err);
+                 else console.log('Transaction saved:', savedTransaction);
+                }).then(() => TransactionModel.find().then(data => res.send(data)))
         }
 
 const deleteTransaction = (req, res) => {
-    transactionModel.findByIdAndDelete(req.body.id).then(() => {
-        transactionModel.find().then(data => res.send(data))
+    TransactionModel.findByIdAndDelete(req.body.id).then(() => {
+        TransactionModel.find().then(data => res.send(data))
     })
 }
 

@@ -1,26 +1,26 @@
-const productModel = require('../models/Product');
+const ProductModel = require('../models/Product');
 
 const getProducts = (req, res) => {
-    productModel.find()
+    ProductModel.find()
     .then(data => {
         res.send(data);
     })
 }
 
 const getProduct = (req, res) => {
-    productModel.findOne()({_id: req.params.id}
+    ProductModel.findOne()({_id: req.params.id}
         .then(data => { res.send(data);
         }))
 }
 
 const createProduct = (req, res) => {
-        const newProduct = new productModel({
+        const newProduct = new ProductModel({
                 itemType: req.body.itemType,
                 quantity: req.body.quantity,
                 price: req.body.price,
             });
             newProduct.save().then(() => {
-                productModel.find().then(data => res.send(data))
+                ProductModel.find().then(data => res.send(data))
             })
         }
 
@@ -31,13 +31,13 @@ const updateProduct = (req, res) => {
         quantity: req.body.quantity,
         price: req.body.price,
     }
-    productModel.findOneAndUpdate(filter, updateProductValues)
+    ProductModel.findOneAndUpdate(filter, updateProductValues)
     .then(() =>  res.sendStatus(201))
 }
 
 const deleteProduct = (req, res) => {
-    productModel.findByIdAndDelete(req.body.id).then(() => {
-        productModel.find().then(data => res.send(data))
+    ProductModel.findByIdAndDelete(req.body.id).then(() => {
+        ProductModel.find().then(data => res.send(data))
     })
 }
 

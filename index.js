@@ -17,9 +17,7 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-mongoose.connection.once('open', () => {
-    console.log('Now connected to MongoDB Atlas');
-});
+mongoose.connection.once('open', () => console.log('Now connected to MongoDB Atlas'));
 
 // Use the MONGODB_URI from the .env file
 const MONGODB_URI = process.env.MONGODB_URI;
